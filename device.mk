@@ -270,6 +270,37 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.camera.ois.disable=0
 
+ifeq ($(TARGET_BUILD_VARIANT), user)
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.adb.secure=1
+
+# Set default USB interface
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+   persist.sys.usb.config=mtp,adb
+
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.sys.usb.default.config=mtp,adb
+
+else
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.adb.secure=0 \
+    ro.secure = 0
+
+# Set default USB interface
+# post_process_props.py will add adb for debuggable build
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+   persist.sys.usb.config=mtp
+
+
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.sys.usb.default.config=mtp,adb
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.root_access=2 \
+    persist.smartisan.logs.enable=1
+
+endif
+
 # GPS configuration
 PRODUCT_COPY_FILES += \
     device/moto/shamu/gps.conf:system/etc/gps.conf
